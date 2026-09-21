@@ -1,5 +1,15 @@
 {
-  "feeds": [
+  "theme_feeds": [
+    "https://www.dealabs.com/rss/groupe/jeux-video",
+    "https://www.dealabs.com/rss/groupe/consoles",
+    "https://www.dealabs.com/rss/groupe/accessoires-gaming",
+    "https://www.dealabs.com/rss/groupe/jeux-pc",
+    "https://www.dealabs.com/rss/groupe/playstation",
+    "https://www.dealabs.com/rss/groupe/xbox",
+    "https://www.dealabs.com/rss/groupe/nintendo",
+    "https://www.dealabs.com/rss/groupe/nintendo-switch"
+  ],
+  "general_feeds": [
     "https://www.dealabs.com/rss/nouveaux",
     "https://www.dealabs.com/rss/hot"
   ],
@@ -10,8 +20,17 @@
     "steam deck", "rog ally", "legion go", "meta quest",
     "jeu video", "jeux video", "console", "manette", "gaming", "retrogaming"
   ],
+  "alert_keywords": [
+    "ps5", "ps4", "playstation", "psn", "dualsense", "ps vr2", "ps portal",
+    "xbox", "game pass", "series x", "series s",
+    "switch", "switch 2", "nintendo", "eshop", "joy-con", "amiibo",
+    "steam deck", "rog ally", "legion go", "meta quest",
+    "jeu video", "jeux video", "console", "manette", "gaming", "retrogaming"
+  ],
   "exclude": [
     "jeu de societe", "jeux de societe", "puzzle", "chaise gaming"
   ],
-  "max_price": null
+  "max_price": null,
+  "telegram_enabled": true,
+  "site_days_kept": 45
 }
