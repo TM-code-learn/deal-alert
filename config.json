@@ -1,0 +1,17 @@
+{
+  "feeds": [
+    "https://www.dealabs.com/rss/nouveaux",
+    "https://www.dealabs.com/rss/hot"
+  ],
+  "keywords": [
+    "ps5", "ps4", "playstation", "psn", "dualsense", "ps vr2", "ps portal",
+    "xbox", "game pass", "series x", "series s",
+    "switch", "switch 2", "nintendo", "eshop", "joy-con", "amiibo",
+    "steam deck", "rog ally", "legion go", "meta quest",
+    "jeu video", "jeux video", "console", "manette", "gaming", "retrogaming"
+  ],
+  "exclude": [
+    "jeu de societe", "jeux de societe", "puzzle", "chaise gaming"
+  ],
+  "max_price": null
+}
