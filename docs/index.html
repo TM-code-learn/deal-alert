@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Game Rat — deals jeux vidéo</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐀</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1b1f3b;
+    --panel: #262b52;
+    --panel-2: #313768;
+    --line: #3d4480;
+    --text: #eef0ff;
+    --muted: #a3a8d6;
+    --sticker: #ffd447;
+    --sticker-ink: #1b1f3b;
+    --fresh: #7de3c3;
+    --display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+    --body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    margin: 0; background: var(--ink); color: var(--text);
+    font: 16px/1.5 var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--sticker); outline-offset: 2px; }
+
+  header { max-width: 1240px; margin: 0 auto; padding: 28px 20px 8px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+  h1 { font: 800 clamp(2rem, 5vw, 3.2rem)/1 var(--display); letter-spacing: -0.03em; margin: 0; }
+  h1 span { display: inline-block; transform: rotate(-3deg); }
+  .status { color: var(--muted); font-size: .95rem; }
+
+  .filters {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+    background: color-mix(in srgb, var(--ink) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .filters-inner { max-width: 1240px; margin: 0 auto; padding: 12px 20px; display: grid; gap: 10px; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  input, select, button { font: inherit; color: inherit; }
+  .search {
+    width: 100%; padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--panel);
+  }
+  .search::placeholder { color: var(--muted); }
+  .chip {
+    border: 1px solid var(--line); background: transparent; border-radius: 999px;
+    padding: 6px 14px; cursor: pointer; white-space: nowrap;
+  }
+  .chip[aria-pressed="true"] { background: var(--sticker); color: var(--sticker-ink); border-color: var(--sticker); font-weight: 700; }
+  .chip small { opacity: .7; margin-left: 4px; }
+  .field { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: .9rem; }
+  .field select, .field input { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; color: var(--text); }
+  .field input { width: 90px; }
+  .reset { margin-left: auto; background: none; border: 0; color: var(--muted); text-decoration: underline; cursor: pointer; }
+
+  main { max-width: 1240px; margin: 0 auto; padding: 18px 20px 60px; }
+  .count { color: var(--muted); margin: 0 0 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px; }
+
+  .deal {
+    display: flex; flex-direction: column; text-decoration: none;
+    background: var(--panel); border-radius: 14px; overflow: hidden;
+    border: 1px solid transparent;
+  }
+  .deal:hover { border-color: var(--line); background: var(--panel-2); }
+  .shot { position: relative; aspect-ratio: 4 / 3; background: #fff; }
+  .shot img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .shot .noimg { display: grid; place-items: center; height: 100%; font-size: 2.5rem; background: var(--panel-2); }
+  .price {
+    position: absolute; right: 10px; bottom: -14px;
+    background: var(--sticker); color: var(--sticker-ink);
+    font: 800 1.35rem/1 var(--display); letter-spacing: -0.02em;
+    padding: 8px 12px 9px; border-radius: 6px;
+    transform: rotate(-4deg);
+    box-shadow: 0 3px 0 rgba(0,0,0,.25);
+  }
+  .price.free { background: var(--fresh); }
+  .body { padding: 20px 14px 14px; display: grid; gap: 6px; }
+  .meta { display: flex; justify-content: space-between; gap: 8px; font-size: .85rem; color: var(--muted); }
+  .merchant { color: var(--text); font-weight: 700; }
+  .title { margin: 0; font-size: 1rem; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .new { color: var(--fresh); font-weight: 700; }
+  .cat { font-size: .8rem; color: var(--muted); }
+
+  .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+  .empty button { margin-top: 12px; }
+  .more { display: block; margin: 28px auto 0; padding: 12px 22px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); cursor: pointer; }
+
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .price { font-size: 1.05rem; padding: 6px 9px 7px; right: 6px; }
+    .body { padding: 18px 10px 10px; }
+    .title { font-size: .9rem; }
+    .filters { position: static; }
+    .meta { flex-direction: column; gap: 0; }
+    .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 -20px; padding: 0 20px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .deal:hover .price { transform: rotate(-1deg) scale(1.05); transition: transform .15s; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1><span>🐀</span> Game Rat</h1>
+  <p class="status" id="status">Chargement des deals…</p>
+</header>
+
+<div class="filters">
+  <div class="filters-inner">
+    <input class="search" id="q" type="search" placeholder="Rechercher un jeu, une console, un accessoire…" aria-label="Rechercher">
+    <div class="row chips" id="cats" role="group" aria-label="Catégories"></div>
+    <div class="row">
+      <label class="field">Marchand
+        <select id="merchant"><option value="">Tous</option></select>
+      </label>
+      <label class="field">Prix max
+        <input id="max" type="number" min="0" step="1" inputmode="numeric" placeholder="€">
+      </label>
+      <label class="field">Trier
+        <select id="sort">
+          <option value="recent">Plus récents</option>
+          <option value="asc">Prix croissant</option>
+          <option value="desc">Prix décroissant</option>
+        </select>
+      </label>
+      <button class="reset" id="reset" type="button">Réinitialiser</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+  <button class="more" id="more" type="button" hidden>Afficher plus de deals</button>
+</main>
+
+<script>
+const CATS = ["Tout", "PlayStation", "Xbox", "Nintendo", "PC", "Accessoires", "Autres"];
+const PAGE = 60;
+const state = { q: "", cat: "Tout", merchant: "", max: null, sort: "recent", shown: PAGE };
+let deals = [];
+let lastVisit = null;
+
+const $ = (id) => document.getElementById(id);
+const norm = (s) => (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function ago(iso) {
+  const min = Math.round((Date.now() - new Date(iso)) / 60000);
+  if (min < 1) return "à l'instant";
+  if (min < 60) return `il y a ${min} min`;
+  const h = Math.round(min / 60);
+  if (h < 24) return `il y a ${h} h`;
+  const d = Math.round(h / 24);
+  return d === 1 ? "hier" : `il y a ${d} jours`;
+}
+
+function filtered() {
+  const q = norm(state.q).split(/\s+/).filter(Boolean);
+  const list = deals.filter((d) =>
+    (state.cat === "Tout" || d.category === state.cat) &&
+    (!state.merchant || d.merchant === state.merchant) &&
+    (state.max == null || d.price == null || d.price <= state.max) &&
+    q.every((w) => d._search.includes(w))
+  );
+  if (state.sort === "recent") return list.sort((a, b) => b.published.localeCompare(a.published));
+  const dir = state.sort === "asc" ? 1 : -1;
+  const priced = list.filter((d) => d.price != null).sort((a, b) => (a.price - b.price) * dir);
+  return priced.concat(list.filter((d) => d.price == null));
+}
+
+function card(d) {
+  const isNew = lastVisit && d.first_seen > lastVisit;
+  const free = d.price === 0;
+  const price = d.price_label ? `<span class="price${free ? " free" : ""}">${free ? "Gratuit" : esc(d.price_label)}</span>` : "";
+  const img = d.image
+    ? `<img src="${esc(d.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'noimg',textContent:'🎮'}))">`
+    : `<div class="noimg">🎮</div>`;
+  return `<a class="deal" href="${esc(d.link)}" target="_blank" rel="noopener">
+    <div class="shot">${img}${price}</div>
+    <div class="body">
+      <div class="meta"><span class="merchant">${esc(d.merchant)}</span><span>${isNew ? '<span class="new">Nouveau</span>' : ago(d.published)}</span></div>
+      <p class="title">${esc(d.title)}</p>
+      <span class="cat">${esc(d.category)}</span>
+    </div>
+  </a>`;
+}
+
+function render() {
+  const list = filtered();
+  const grid = $("grid");
+  $("count").textContent = `${list.length} deal${list.length > 1 ? "s" : ""}`;
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1">Aucun deal ne correspond à ces filtres.<br><button class="chip" type="button" onclick="resetFilters()">Réinitialiser les filtres</button></div>`;
+    $("more").hidden = true;
+    return;
+  }
+  grid.innerHTML = list.slice(0, state.shown).map(card).join("");
+  $("more").hidden = list.length <= state.shown;
+}
+
+function renderCats() {
+  const counts = deals.reduce((m, d) => (m[d.category] = (m[d.category] || 0) + 1, m), {});
+  $("cats").innerHTML = CATS.filter((c) => c === "Tout" || counts[c]).map((c) =>
+    `<button class="chip" type="button" aria-pressed="${c === state.cat}" data-cat="${c}">${c}<small>${c === "Tout" ? deals.length : counts[c]}</small></button>`
+  ).join("");
+}
+
+function renderMerchants() {
+  const counts = deals.reduce((m, d) => (m[d.merchant] = (m[d.merchant] || 0) + 1, m), {});
+  const names = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b));
+  $("merchant").innerHTML = `<option value="">Tous (${names.length})</option>` +
+    names.map((n) => `<option value="${esc(n)}">${esc(n)} (${counts[n]})</option>`).join("");
+}
+
+function update(patch) { Object.assign(state, patch, { shown: PAGE }); render(); }
+
+function resetFilters() {
+  $("q").value = ""; $("merchant").value = ""; $("max").value = ""; $("sort").value = "recent";
+  Object.assign(state, { q: "", cat: "Tout", merchant: "", max: null, sort: "recent", shown: PAGE });
+  renderCats(); render();
+}
+
+$("q").addEventListener("input", (e) => update({ q: e.target.value }));
+$("merchant").addEventListener("change", (e) => update({ merchant: e.target.value }));
+$("max").addEventListener("input", (e) => update({ max: e.target.value === "" ? null : Number(e.target.value) }));
+$("sort").addEventListener("change", (e) => update({ sort: e.target.value }));
+$("reset").addEventListener("click", resetFilters);
+$("more").addEventListener("click", () => { state.shown += PAGE; render(); });
+$("cats").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-cat]");
+  if (!b) return;
+  state.cat = b.dataset.cat; state.shown = PAGE;
+  renderCats(); render();
+});
+
+(async () => {
+  try { lastVisit = localStorage.getItem("gamerat:lastVisit"); } catch {}
+  try {
+    const res = await fetch(`deals.json?t=${Date.now()}`);
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    deals = data.deals.map((d) => ({ ...d, _search: norm(`${d.title} ${d.merchant} ${d.category}`) }));
+    const newCount = lastVisit ? deals.filter((d) => d.first_seen > lastVisit).length : 0;
+    $("status").textContent = `Mis à jour ${ago(data.updated)}` + (newCount ? `. ${newCount} nouveau${newCount > 1 ? "x" : ""} depuis ta dernière visite` : "");
+    try { localStorage.setItem("gamerat:lastVisit", data.updated); } catch {}
+    renderCats(); renderMerchants(); render();
+  } catch (err) {
+    $("status").textContent = "Les deals n'ont pas pu être chargés. Recharge la page dans quelques minutes : le fichier est mis à jour toutes les 30 min.";
+  }
+})();
+</script>
+</body>
+</html>
